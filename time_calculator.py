@@ -1,4 +1,4 @@
-def add_time(start, duration, *day):
+def add_time(start, duration, day = None):
 
     split_start = start.replace(':', " ").replace('AM', '00').replace('PM', '12').split()
     
@@ -10,10 +10,40 @@ def add_time(start, duration, *day):
 
     minutes_result = minutes_start + minutes_duration
 
-    days_result = 0
+    def day_to_num(weekday):
+
+        if weekday == "Monday":
+            num = 0
+
+        if weekday == "Tuesday":
+            num = 1
+
+        if weekday == "Wednesday":
+            num = 2
+
+        if weekday == "Thursday":
+            num = 3
+
+        if weekday == "Friday":
+            num = 4
+
+        if weekday == "Saturday":
+            num = 5
+
+        if weekday == "Sunday":
+            num = 6
+
+        if weekday == None:
+            num = None
+
+        return num
+
+    day_num = day_to_num(day)
+
+    days_to_add = 0
 
     while minutes_result > 1440:
-        days_result += 1;
+        days_to_add += 1;
         minutes_result -= 1440
 
     hours_result = 0
@@ -31,7 +61,6 @@ def add_time(start, duration, *day):
         hours_result += 1
         minutes_result -= 60
 
-
     if hours_result > 12:
         hours_result -= 12
 
@@ -47,6 +76,9 @@ def add_time(start, duration, *day):
 
     time_result = str(hours_result) + ":" + str(minutes_result) + " " + am_pm
 
+    if day_num != None:
+        time_result += ", " + str(day_num)
+
     return time_result
 
-print(add_time("12:00 AM", "12:00",))
+print(add_time("12:00 AM", "12:00", "Monday"))
