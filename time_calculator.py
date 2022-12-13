@@ -16,18 +16,24 @@ def add_time(start, duration, *day):
         days_result += 1;
         minutes_result -= 1440
 
-    while minutes_result >= 720:
+    hours_result = 0
+        
+    if minutes_result < 720:
+        am_pm = "AM"
+
+    elif minutes_result < 1440:
         am_pm = "PM"
-        minutes_result -= 720
 
     else:
         am_pm = "AM"
 
-    hours_result = 0
-
     while minutes_result >= 60:
         hours_result += 1
         minutes_result -= 60
+
+
+    if hours_result > 12:
+        hours_result -= 12
 
     if hours_result == 0:
         hours_result = "00"
@@ -35,12 +41,12 @@ def add_time(start, duration, *day):
     elif hours_result < 10:
         hours_result = "0" + str(hours_result)
 
+    if minutes_result == 0:
+        minutes_result = "00"
 
-
-    
 
     time_result = str(hours_result) + ":" + str(minutes_result) + " " + am_pm
 
     return time_result
 
-print(add_time("2:05 PM", "1:05",))
+print(add_time("12:00 AM", "12:00",))
