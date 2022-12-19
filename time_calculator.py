@@ -1,4 +1,4 @@
-def add_time(start, duration, day = None):
+def add_time(start, duration, day = ""):
 
     split_start = start.replace(':', " ").replace('AM', '00').replace('PM', '12').split()
     
@@ -10,34 +10,22 @@ def add_time(start, duration, day = None):
 
     minutes_result = minutes_start + minutes_duration
 
-    def day_to_num(weekday):
+    if day != "":
+        day_num = 0
 
-        if weekday == "Monday":
-            num = 0
-
-        if weekday == "Tuesday":
-            num = 1
-
-        if weekday == "Wednesday":
-            num = 2
-
-        if weekday == "Thursday":
-            num = 3
-
-        if weekday == "Friday":
-            num = 4
-
-        if weekday == "Saturday":
-            num = 5
-
-        if weekday == "Sunday":
-            num = 6
-
-        if weekday == None:
-            num = None
-
+    def day_to_num(day):
+        weekdays = {"monday" : 0, "tuesday" : 1, "wednesday" : 2, "thursday" : 3, "friday" : 4, "saturday" : 5, "sunday" : 6}
+        num = weekdays.get(day.lower())
         return num
 
+    def num_to_day(num):
+
+        weekdays = {0 : "Monday", 1 : "Tuesday", 2 : "Wednesday", 3 : "Thursday", 4 : "Friday", 5 : "Saturday", 6 : "Sunday"}
+        while num > 6:
+            num = num - 7
+        day = weekdays.get(num)
+        return day
+    
     day_num = day_to_num(day)
 
     days_to_add = 0
@@ -51,7 +39,7 @@ def add_time(start, duration, day = None):
     if minutes_result < 720:
         am_pm = "AM"
 
-    elif minutes_result < 1440:
+    if minutes_result > 720:
         am_pm = "PM"
 
     else:
@@ -65,20 +53,27 @@ def add_time(start, duration, day = None):
         hours_result -= 12
 
     if hours_result == 0:
-        hours_result = "00"
-    
-    elif hours_result < 10:
-        hours_result = "0" + str(hours_result)
+        hours_result = "12"
 
     if minutes_result == 0:
         minutes_result = "00"
 
+    elif minutes_result < 10:
+        minutes_result = "0" + str(minutes_result)
+
 
     time_result = str(hours_result) + ":" + str(minutes_result) + " " + am_pm
 
-    if day_num != None:
-        time_result += ", " + str(day_num)
+    if day != "":
+        day_num = day_num + days_to_add
+        time_result += ", " + str(num_to_day(day_num))
+
+    if days_to_add == 1:
+        time_result += " (next day)"
+
+    if days_to_add > 1:
+        time_result += " (" + str(days_to_add) + " days later)"
 
     return time_result
-
-print(add_time("12:00 AM", "12:00", "Monday"))
+    
+print(add_time("8:16 PM", "466:02", "tuesday"))
